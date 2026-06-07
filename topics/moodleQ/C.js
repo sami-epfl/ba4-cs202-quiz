@@ -1,4 +1,4 @@
-registerTopic("C Training",
+registerTopic("Moodle - C questions",
 
   // Quiz Week 8 on moodle
   // Q13
