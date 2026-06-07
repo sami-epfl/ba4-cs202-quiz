@@ -78,20 +78,7 @@ registerTopic("FlashCards",
 
   {
     type: "flashcard",
-    question: "What is the Application layer?",
-    answer: "The application layer is the layer closest to the user. It provides network services directly to user applications and defines how applications communicate over the network.<br><br>Example — when you type <code>www.google.com</code> in your browser:<br>1. The browser process uses the DNS protocol to obtain the IP address corresponding to <code>www.google.com</code>.<br>2. The DNS reply returns the IP address to the browser process.<br>3. The browser process creates an HTTP request: <pre>GET / HTTP/1.1\nHost: www.google.com</pre>4. The browser process calls <code>send(...)</code> to send this HTTP message.<br>5. The operating system and the lower network layers prepare the message for transmission and send it across the Internet.<br><br>Both DNS and HTTP are application-layer protocols."
-  },
-
-  {
-    type: "flashcard",
-    question: "What is the Transport layer?",
-    answer: "The transport layer ensures reliable or best-effort data delivery between systems. It segments data into smaller units, handles flow control, and manages error checking. Protocols like TCP ensure data arrives intact and in order, while UDP provides faster, connectionless delivery."
-  },
-
-  {
-    type: "flashcard",
     question: "What are the two types of interfaces in Internet layers?",
     answer: "• Same layer, cross-device: entities at the same layer on different devices communicate via a protocol — messages are embedded in the header.<br>• Cross-layer, same device: adjacent layers on the same device communicate through a well-defined interface."
   },
-  
 );
