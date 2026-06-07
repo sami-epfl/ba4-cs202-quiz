@@ -342,230 +342,6 @@ What does it print?`,
     explanation: "<code>p</code> points to <code>x</code> (=1.2). Inside <code>f</code>, <code>ptr</code> is a local copy — <code>ptr = &a</code> only changes the local copy, not <code>p</code> in main. So <code>*p</code> still = <b>1.2</b>."
   },
 
-  // Quiz 9 on moodle
-  // Q8
-  {
-    question: `What are all the proper ways to initialize a variable <code>a</code> of the following type?<br>
-<pre>struct some_type {
-    size_t s;
-    double tab[3];
-};</pre>
-<b>Penalty for wrong ticks.</b>`,
-    type: "mcq",
-    options: [
-      "None of the other.",
-`struct some_type a;
-a.s = 0;
-a.tab = { 0.0, 0.0, 0.0 };`,
-`struct some_type {
-  size_t s = 0;
-  double tab[3] = { 0.0 };
-};`,
-`struct some_type a;
-a.s = 0;
-const double init[] = { 0.0, 0.0, 0.0 };
-a.tab = init;`,
-      "struct some_type a = { 0, { 1.0 } };",
-`struct some_type a;
-memset(&a, 0, sizeof(a));`
-    ],
-    answer: [4, 5],
-    explanation: "• <code>struct some_type a = { 0, { 1.0 } }</code>: valid aggregate initialization — s=0, tab={1.0, 0.0, 0.0} ✓<br>• <code>memset(&a, 0, sizeof(a))</code>: zeroes all bytes — valid for zero-initialization ✓<br>• <code>a.tab = { ... }</code>: cannot assign to array after declaration ✗<br>• <code>size_t s = 0</code> in struct definition: invalid in C (no default values in struct) ✗<br>• <code>a.tab = init</code>: cannot assign arrays ✗"
-  },
-
-  // Q9
-  {
-    question: "What is the proper way to augment the size (up to <code>newsize</code>) of an already allocated pointer <code>ptr</code>?<br><small>(tmp is a pointer of the same type as ptr)</small>",
-    type: "scq",
-    options: [
-      "ptr = realloc(newsize);",
-      "realloc(ptr, newsize);",
-      "tmp = realloc(ptr, newsize);",
-      "ptr = realloc(ptr, newsize);",
-      "Something else than the other proposals.",
-      "tmp = realloc(ptr, newsize); if (tmp != NULL) ptr = tmp;"
-    ],
-    answer: 5,
-    explanation: "The correct pattern for safe realloc:<br><code>tmp = realloc(ptr, newsize); if (tmp != NULL) ptr = tmp;</code><br>• If <code>realloc</code> fails it returns NULL — using <code>ptr = realloc(ptr, newsize)</code> would overwrite ptr with NULL, losing the original allocation ✗<br>• Using a temporary pointer lets you check for failure before updating ptr ✓"
-  },
-
-  // Q10
-  {
-    question: "What is the <u>proper</u> way to read an array of <code>n</code> <code>double</code> from a binary file <code>myfile</code> into <code>double tab[MAX]</code> (where <code>n &lt;= MAX</code>)?<br><small>Assume <code>count</code> is already declared with the proper type.</small>",
-    type: "scq",
-    options: [
-      "It's not possible in general since nb <= MAX; we must have nb < MAX instead.",
-      "count = fread(tab, sizeof(double), n, myfile);",
-      "another way than the other proposals",
-`count = 0;
-for (size_t i = 0; i < n; ++i) {
-  count += fscanf(myfile, "%lf", tab + i);
-}`,
-`count = 0;
-for (size_t i = 0; i < n; ++i) {
-  count += fread(&tab[i], sizeof(double), 1, myfile);
-}`,
-      "count = fread(tab, sizeof(n * double), 1, myfile);",
-      "count = fread(&tab[1], sizeof(double), n, myfile);",
-      "count = fread(tab, n * sizeof(double), 1, myfile);"
-    ],
-    answer: 1,
-    explanation: "<code>fread(tab, sizeof(double), n, myfile)</code> reads exactly <code>n</code> elements of <code>sizeof(double)</code> bytes each from the binary file into <code>tab</code>, and returns the number of elements successfully read ✓<br>• <code>fscanf</code> is for text files, not binary ✗<br>• <code>fread(tab, n*sizeof(double), 1, myfile)</code> returns 0 or 1 (number of blocks), not the number of doubles — can't detect partial reads ✗<br>• <code>&tab[1]</code> skips the first element ✗"
-  },
-
-  // Quiz 6 on moodle
-  // Q9
-  {
-    question: `You have a library function:<br>
-<pre>void transform(const Object* obj, uint16_t** tab, size_t* size);</pre>
-Its purpose is to allocate an array of <code>uint16_t</code> and to provide its size back.<br>
-Assume you have a valid <code>Object o</code>.<br>
-What is the <em>proper</em> way to declare <code>tab</code> and <code>size</code> and to call <code>transform()</code>?`,
-    type: "scq",
-    options: [
-      "uint16_t tab[10] = {0};\nsize_t s = 10;\ntransform(&o, &tab, &s);",
-      "size_t s = 3;\nuint16_t tab[s];\ntransform(&o, &tab, &s);",
-      "uint16_t** tab = malloc(sizeof(uint16_t*));\nsize_t* s = malloc(sizeof(size_t));\ntransform(&o, tab, s);",
-      "Something else (none of the others).",
-      "uint16_t** tab;\nsize_t* s;\ntransform(&o, tab, s);",
-      "uint16_t* tab = NULL;\nsize_t s;\ntransform(&o, &tab, &s);"
-    ],
-    answer: 5,
-    explanation: "<code>transform</code> takes <code>uint16_t**</code> and <code>size_t*</code> — it will allocate the array and write the pointer and size back.<br>So we need: <code>uint16_t* tab</code> (so <code>&tab</code> is <code>uint16_t**</code>) and <code>size_t s</code> (so <code>&s</code> is <code>size_t*</code>).<br>Initializing <code>tab = NULL</code> is good practice before letting the function allocate it."
-  },
-
-  // Q10
-  {
-    question: `Assume you have a type <code>Car</code> with a field <code>price</code>.<br>
-Which of the following functions can you pass (maybe with some casting) to <code>qsort()</code> to sort by <code>price</code> an array of <code>Car</code>?<br>
-<b>Penalty for wrong ticks.</b>`,
-    type: "mcq",
-    options: [
-      "None of these functions (they are all wrong in one way or another).",
-`int comp(const void* p1, const void* p2)
-{
-    if (p1->price < p2->price) return -1;
-    if (p1->price > p2->price) return 1;
-    return 0;
-}`,
-`int comp(const void* p1, const void* p2)
-{
-    const Car * const q1 = p1;
-    const Car * const q2 = p2;
-    if (q1->price < q2->price) return -1;
-    if (q1->price > q2->price) return 1;
-    return 0;
-}`,
-`int comp(const Car* p1, const Car* p2)
-{
-    if (p1->price < p2->price) return -1;
-    if (p1->price > p2->price) return 1;
-    return 0;
-}`
-    ],
-    answer: [2, 3],
-    explanation: "• Option 2 ✓: casts <code>void*</code> to <code>const Car*</code> before dereferencing — correct qsort comparator pattern<br>• Option 3 ✓: takes <code>const Car*</code> directly — can be passed to qsort with a cast to the comparator type<br>• Option 1 ✗: tries to dereference <code>void*</code> directly — invalid in C, void* has no fields"
-  },
-
-  // Q11
-  {
-    question: `Consider the following definitions:<br>
-<pre>typedef unsigned char byte;
-
-size_t size(byte tab[])
-{ return sizeof(tab) / sizeof(tab[0]); }
-
-void yes(int i)
-{ if (i) puts("yes"); else puts("no"); }
-
-byte tab1[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9, 8 };
-byte tab2[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9 };
-byte tab3[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 3 };
-byte tab4[] = { 9, 8, 7, 6, 5, 4, 3, 2, 0 };
-
-const size_t s2 = 11;
-const size_t s4 =  9;</pre>
-Which of the following statements below will print "yes"?<br>(You can consider the architecture to be 64 bits.)<br><b>Penalty for wrong ticks.</b>`,
-    type: "mcq",
-    options: [
-      "yes(!strcmp(tab1, tab1));",
-      "yes(!strcmp(tab1, tab2));",
-      "yes(!strcmp(tab1, tab3));",
-      "yes(!strcmp(tab1, tab4));",
-      "yes(!strncmp(tab1, tab2, s2));",
-      "yes(!strncmp(tab1, tab3, s2));",
-      "yes(!strncmp(tab1, tab4, s4));",
-      "yes(!strncmp(tab1, tab2, size(tab2)));",
-      "yes(!strncmp(tab1, tab3, size(tab3)));",
-      "yes(!strncmp(tab1, tab4, size(tab4)));",
-      "None of them, the code is incorrect."
-    ],
-    answer: [0, 1, 2, 4, 5, 7, 8, 9],
-    explanation: "All arrays have a <code>0</code> byte acting as a null terminator.<br>• <b>strcmp</b> stops at the first 0: tab1, tab2, tab3 all have 0 at index 9 → first 9 bytes identical → equal ✓. tab4 has 0 at index 8, tab1[8]=1 → different ✗<br>• <b>strncmp(tab1, tab2, s2=11)</b>: both hit 0 at index 9 before n=11 → equal ✓<br>• <b>strncmp(tab1, tab3, s2=11)</b>: same, 0 at index 9 → equal ✓<br>• <b>strncmp(tab1, tab4, s4=9)</b>: tab4[8]=0, tab1[8]=1 → differ ✗<br>• <b>size(tab)</b> inside a function receives a pointer, so sizeof(tab)=8 (pointer size on 64-bit), size() returns 8 for all. strncmp with n=8 compares only first 8 bytes (indices 0–7) which are identical for all arrays ✓"
-  },
-
-  // Quiz 4 on moodle
-  // Q8
-  {
-    question: `Considering <code>double** tab;</code> and provided that enough memory has been allocated for 4 lines and 4 columns, each of the same length (4), then <code>tab[2][0]</code> always comes in memory right after <code>tab[1][3]</code>.`,
-    type: "scq",
-    options: [
-      "True.",
-      "False, it's tab[1][4] which comes in memory right after tab[1][3].",
-      "False in general (it can be, but this is not ensured).",
-      "The question does not make sense since tab[1][3] is not valid syntax.",
-      "False, it's tab[2][3] which comes in memory right after tab[1][3]."
-    ],
-    answer: 2,
-    explanation: "<code>double**</code> is a pointer to pointers — each row is separately allocated in memory. Unlike a 2D array (<code>double tab[4][4]</code>), the rows are <b>not guaranteed to be contiguous</b> in memory. So <code>tab[2][0]</code> may or may not be right after <code>tab[1][3]</code>."
-  },
-
-  // Q9
-  {
-    question: `What does the following code <em>excerpt</em> print?<br>
-<pre>int matrix[] = { 1, 3, 5, 7, 9, 11 };
-
-putchar('x');
-int i = 123;
-int* ptr = matrix + 1;
-while ((i = *ptr++) &lt; 9) { printf("%d", i); }</pre>`,
-    type: "scq",
-    options: [
-      "x7",
-      "Nothing because it does not compile.",
-      "x13579",
-      "x357",
-      "x1357",
-      "Something else than the other proposals.",
-      "x3579",
-      "x57",
-      "x123",
-      "x"
-    ],
-    answer: 3,
-    explanation: "<code>ptr = matrix + 1</code> → points to matrix[1] = 3.<br>Loop: <code>i = *ptr++</code> assigns then advances ptr.<br>• i=3 (ptr→5): 3 &lt; 9 → print \"3\"<br>• i=5 (ptr→7): 5 &lt; 9 → print \"5\"<br>• i=7 (ptr→9): 7 &lt; 9 → print \"7\"<br>• i=9 (ptr→11): 9 &lt; 9 is false → stop<br>Output: <b>x357</b>"
-  },
-
-  // Q10
-  {
-    question: `On a 64-bit architecture, what does the following code print?<br>
-<pre>const char* s = "123456";
-printf("%zu\\n", sizeof(s));</pre>
-<small>Note: <code>%zu</code> is the correct format to print <code>size_t</code> values.</small>`,
-    type: "scq",
-    options: [
-      "5",
-      "6",
-      "7",
-      "8",
-      "Nothing, it does not compile.",
-      "Some unknown value that cannot be determined from the provided informations.",
-      "Another (known) value, different from the above proposed propositions."
-    ],
-    answer: 3,
-    explanation: "<code>sizeof(s)</code> gives the size of the <b>pointer</b> <code>s</code>, not the string it points to. On a <b>64-bit architecture</b>, a pointer is <b>8 bytes</b>. (The string length is 6, and strlen would return 6, but sizeof on a pointer = 8.)"
-  },
-
   // Quiz 3 on moodle
   // Q8 — one sub-question per function
   {
@@ -768,6 +544,158 @@ int main(void)
     explanation: "<code>\"Hallo world!\"</code> is a <b>string literal</b> stored in read-only memory. Attempting to modify it (<code>string[1] = 'e'</code>) causes a <b>Segmentation Fault</b> at runtime."
   },
 
+    // Quiz 4 on moodle
+  // Q8
+  {
+    question: `Considering <code>double** tab;</code> and provided that enough memory has been allocated for 4 lines and 4 columns, each of the same length (4), then <code>tab[2][0]</code> always comes in memory right after <code>tab[1][3]</code>.`,
+    type: "scq",
+    options: [
+      "True.",
+      "False, it's tab[1][4] which comes in memory right after tab[1][3].",
+      "False in general (it can be, but this is not ensured).",
+      "The question does not make sense since tab[1][3] is not valid syntax.",
+      "False, it's tab[2][3] which comes in memory right after tab[1][3]."
+    ],
+    answer: 2,
+    explanation: "<code>double**</code> is a pointer to pointers — each row is separately allocated in memory. Unlike a 2D array (<code>double tab[4][4]</code>), the rows are <b>not guaranteed to be contiguous</b> in memory. So <code>tab[2][0]</code> may or may not be right after <code>tab[1][3]</code>."
+  },
+
+  // Q9
+  {
+    question: `What does the following code <em>excerpt</em> print?<br>
+<pre>int matrix[] = { 1, 3, 5, 7, 9, 11 };
+
+putchar('x');
+int i = 123;
+int* ptr = matrix + 1;
+while ((i = *ptr++) &lt; 9) { printf("%d", i); }</pre>`,
+    type: "scq",
+    options: [
+      "x7",
+      "Nothing because it does not compile.",
+      "x13579",
+      "x357",
+      "x1357",
+      "Something else than the other proposals.",
+      "x3579",
+      "x57",
+      "x123",
+      "x"
+    ],
+    answer: 3,
+    explanation: "<code>ptr = matrix + 1</code> → points to matrix[1] = 3.<br>Loop: <code>i = *ptr++</code> assigns then advances ptr.<br>• i=3 (ptr→5): 3 &lt; 9 → print \"3\"<br>• i=5 (ptr→7): 5 &lt; 9 → print \"5\"<br>• i=7 (ptr→9): 7 &lt; 9 → print \"7\"<br>• i=9 (ptr→11): 9 &lt; 9 is false → stop<br>Output: <b>x357</b>"
+  },
+
+    // Q10
+    {
+        question: `On a 64-bit architecture, what does the following code print?<br>
+    <pre>const char* s = "123456";
+    printf("%zu\\n", sizeof(s));</pre>
+    <small>Note: <code>%zu</code> is the correct format to print <code>size_t</code> values.</small>`,
+        type: "scq",
+        options: [
+        "5",
+        "6",
+        "7",
+        "8",
+        "Nothing, it does not compile.",
+        "Some unknown value that cannot be determined from the provided informations.",
+        "Another (known) value, different from the above proposed propositions."
+        ],
+        answer: 3,
+        explanation: "<code>sizeof(s)</code> gives the size of the <b>pointer</b> <code>s</code>, not the string it points to. On a <b>64-bit architecture</b>, a pointer is <b>8 bytes</b>. (The string length is 6, and strlen would return 6, but sizeof on a pointer = 8.)"
+    },
+    // Quiz 6 on moodle
+    // Q9
+    {
+    question: `You have a library function:<br>
+<pre>void transform(const Object* obj, uint16_t** tab, size_t* size);</pre>
+Its purpose is to allocate an array of <code>uint16_t</code> and to provide its size back.<br>
+Assume you have a valid <code>Object o</code>.<br>
+What is the <em>proper</em> way to declare <code>tab</code> and <code>size</code> and to call <code>transform()</code>?`,
+    type: "scq",
+    options: [
+      "uint16_t tab[10] = {0};\nsize_t s = 10;\ntransform(&o, &tab, &s);",
+      "size_t s = 3;\nuint16_t tab[s];\ntransform(&o, &tab, &s);",
+      "uint16_t** tab = malloc(sizeof(uint16_t*));\nsize_t* s = malloc(sizeof(size_t));\ntransform(&o, tab, s);",
+      "Something else (none of the others).",
+      "uint16_t** tab;\nsize_t* s;\ntransform(&o, tab, s);",
+      "uint16_t* tab = NULL;\nsize_t s;\ntransform(&o, &tab, &s);"
+    ],
+    answer: 5,
+    explanation: "<code>transform</code> takes <code>uint16_t**</code> and <code>size_t*</code> — it will allocate the array and write the pointer and size back.<br>So we need: <code>uint16_t* tab</code> (so <code>&tab</code> is <code>uint16_t**</code>) and <code>size_t s</code> (so <code>&s</code> is <code>size_t*</code>).<br>Initializing <code>tab = NULL</code> is good practice before letting the function allocate it."
+  },
+
+  // Q10
+  {
+    question: `Assume you have a type <code>Car</code> with a field <code>price</code>.<br>
+Which of the following functions can you pass (maybe with some casting) to <code>qsort()</code> to sort by <code>price</code> an array of <code>Car</code>?<br>
+<b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "None of these functions (they are all wrong in one way or another).",
+`int comp(const void* p1, const void* p2)
+{
+    if (p1->price < p2->price) return -1;
+    if (p1->price > p2->price) return 1;
+    return 0;
+}`,
+`int comp(const void* p1, const void* p2)
+{
+    const Car * const q1 = p1;
+    const Car * const q2 = p2;
+    if (q1->price < q2->price) return -1;
+    if (q1->price > q2->price) return 1;
+    return 0;
+}`,
+`int comp(const Car* p1, const Car* p2)
+{
+    if (p1->price < p2->price) return -1;
+    if (p1->price > p2->price) return 1;
+    return 0;
+}`
+    ],
+    answer: [2, 3],
+    explanation: "• Option 2 ✓: casts <code>void*</code> to <code>const Car*</code> before dereferencing — correct qsort comparator pattern<br>• Option 3 ✓: takes <code>const Car*</code> directly — can be passed to qsort with a cast to the comparator type<br>• Option 1 ✗: tries to dereference <code>void*</code> directly — invalid in C, void* has no fields"
+  },
+
+  // Q11
+  {
+    question: `Consider the following definitions:<br>
+<pre>typedef unsigned char byte;
+
+size_t size(byte tab[])
+{ return sizeof(tab) / sizeof(tab[0]); }
+
+void yes(int i)
+{ if (i) puts("yes"); else puts("no"); }
+
+byte tab1[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9, 8 };
+byte tab2[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9 };
+byte tab3[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 3 };
+byte tab4[] = { 9, 8, 7, 6, 5, 4, 3, 2, 0 };
+
+const size_t s2 = 11;
+const size_t s4 =  9;</pre>
+Which of the following statements below will print "yes"?<br>(You can consider the architecture to be 64 bits.)<br><b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "yes(!strcmp(tab1, tab1));",
+      "yes(!strcmp(tab1, tab2));",
+      "yes(!strcmp(tab1, tab3));",
+      "yes(!strcmp(tab1, tab4));",
+      "yes(!strncmp(tab1, tab2, s2));",
+      "yes(!strncmp(tab1, tab3, s2));",
+      "yes(!strncmp(tab1, tab4, s4));",
+      "yes(!strncmp(tab1, tab2, size(tab2)));",
+      "yes(!strncmp(tab1, tab3, size(tab3)));",
+      "yes(!strncmp(tab1, tab4, size(tab4)));",
+      "None of them, the code is incorrect."
+    ],
+    answer: [0, 1, 2, 4, 5, 7, 8, 9],
+    explanation: "All arrays have a <code>0</code> byte acting as a null terminator.<br>• <b>strcmp</b> stops at the first 0: tab1, tab2, tab3 all have 0 at index 9 → first 9 bytes identical → equal ✓. tab4 has 0 at index 8, tab1[8]=1 → different ✗<br>• <b>strncmp(tab1, tab2, s2=11)</b>: both hit 0 at index 9 before n=11 → equal ✓<br>• <b>strncmp(tab1, tab3, s2=11)</b>: same, 0 at index 9 → equal ✓<br>• <b>strncmp(tab1, tab4, s4=9)</b>: tab4[8]=0, tab1[8]=1 → differ ✗<br>• <b>size(tab)</b> inside a function receives a pointer, so sizeof(tab)=8 (pointer size on 64-bit), size() returns 8 for all. strncmp with n=8 compares only first 8 bytes (indices 0–7) which are identical for all arrays ✓"
+  },
+
   // Quiz Week 8 on moodle
   // Q13
   {
@@ -809,5 +737,78 @@ What should you consider doing <em>first</em> in order to get rid of that error?
     ],
     answer: 7,
     explanation: "Add vector.o to the linker command for test_geometry. This is a linker error — the object file geometry.o references dot_product but the linker can't find its compiled implementation. dot_product() is defined in vector.c, which compiles to vector.o. Adding vector.o to the linker command resolves the reference."
-  }
+  },
+
+  
+  // Quiz 9 on moodle
+  // Q8
+  {
+    question: `What are all the proper ways to initialize a variable <code>a</code> of the following type?<br>
+<pre>struct some_type {
+    size_t s;
+    double tab[3];
+};</pre>
+<b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "None of the other.",
+`struct some_type a;
+a.s = 0;
+a.tab = { 0.0, 0.0, 0.0 };`,
+`struct some_type {
+  size_t s = 0;
+  double tab[3] = { 0.0 };
+};`,
+`struct some_type a;
+a.s = 0;
+const double init[] = { 0.0, 0.0, 0.0 };
+a.tab = init;`,
+      "struct some_type a = { 0, { 1.0 } };",
+`struct some_type a;
+memset(&a, 0, sizeof(a));`
+    ],
+    answer: [4, 5],
+    explanation: "• <code>struct some_type a = { 0, { 1.0 } }</code>: valid aggregate initialization — s=0, tab={1.0, 0.0, 0.0} ✓<br>• <code>memset(&a, 0, sizeof(a))</code>: zeroes all bytes — valid for zero-initialization ✓<br>• <code>a.tab = { ... }</code>: cannot assign to array after declaration ✗<br>• <code>size_t s = 0</code> in struct definition: invalid in C (no default values in struct) ✗<br>• <code>a.tab = init</code>: cannot assign arrays ✗"
+  },
+
+  // Q9
+  {
+    question: "What is the proper way to augment the size (up to <code>newsize</code>) of an already allocated pointer <code>ptr</code>?<br><small>(tmp is a pointer of the same type as ptr)</small>",
+    type: "scq",
+    options: [
+      "ptr = realloc(newsize);",
+      "realloc(ptr, newsize);",
+      "tmp = realloc(ptr, newsize);",
+      "ptr = realloc(ptr, newsize);",
+      "Something else than the other proposals.",
+      "tmp = realloc(ptr, newsize); if (tmp != NULL) ptr = tmp;"
+    ],
+    answer: 5,
+    explanation: "The correct pattern for safe realloc:<br><code>tmp = realloc(ptr, newsize); if (tmp != NULL) ptr = tmp;</code><br>• If <code>realloc</code> fails it returns NULL — using <code>ptr = realloc(ptr, newsize)</code> would overwrite ptr with NULL, losing the original allocation ✗<br>• Using a temporary pointer lets you check for failure before updating ptr ✓"
+  },
+
+  // Q10
+  {
+    question: "What is the <u>proper</u> way to read an array of <code>n</code> <code>double</code> from a binary file <code>myfile</code> into <code>double tab[MAX]</code> (where <code>n &lt;= MAX</code>)?<br><small>Assume <code>count</code> is already declared with the proper type.</small>",
+    type: "scq",
+    options: [
+      "It's not possible in general since nb <= MAX; we must have nb < MAX instead.",
+      "count = fread(tab, sizeof(double), n, myfile);",
+      "another way than the other proposals",
+`count = 0;
+for (size_t i = 0; i < n; ++i) {
+  count += fscanf(myfile, "%lf", tab + i);
+}`,
+`count = 0;
+for (size_t i = 0; i < n; ++i) {
+  count += fread(&tab[i], sizeof(double), 1, myfile);
+}`,
+      "count = fread(tab, sizeof(n * double), 1, myfile);",
+      "count = fread(&tab[1], sizeof(double), n, myfile);",
+      "count = fread(tab, n * sizeof(double), 1, myfile);"
+    ],
+    answer: 1,
+    explanation: "<code>fread(tab, sizeof(double), n, myfile)</code> reads exactly <code>n</code> elements of <code>sizeof(double)</code> bytes each from the binary file into <code>tab</code>, and returns the number of elements successfully read ✓<br>• <code>fscanf</code> is for text files, not binary ✗<br>• <code>fread(tab, n*sizeof(double), 1, myfile)</code> returns 0 or 1 (number of blocks), not the number of doubles — can't detect partial reads ✗<br>• <code>&tab[1]</code> skips the first element ✗"
+  },
+
 );
