@@ -41,7 +41,7 @@ registerTopic("Network layer & IP",
       "1.0.0.0/16"
     ],
     answer: [0, 1],
-    explanation: "Correct answers: (a) 1.0.0.0/8 and (b) 1.1.1.0/31. — 1.0.0.0/8 matches the first 8 bits (00000001); 1.1.1.1 starts with 00000001 ✓. — 1.1.1.0/31 matches the first 31 bits; range is 1.1.1.0–1.1.1.1, so 1.1.1.1 is included ✓. — 1.0.0.0/24 requires first 24 bits = 00000001.00000000.00000000 but 1.1.1.1 has 00000001 in 2nd octet ✗. — 1.0.0.0/16 requires first 16 bits = 00000001.00000000 but 1.1.1.1 has 00000001 in 2nd octet ✗."
+    explanation: "Correct answers: (a) 1.1.1.0/31 and (b) 1.0.0.0/8. — 1.0.0.0/8 matches the first 8 bits (00000001) ✓. — 1.1.1.0/31 matches the first 31 bits; range is 1.1.1.0–1.1.1.1, so 1.1.1.1 is included ✓. — 1.0.0.0/24 requires first 24 bits = 00000001.00000000.00000000 but 1.1.1.1 has 00000001 in 2nd octet ✗. — 1.0.0.0/16 requires first 16 bits = 00000001.00000000 but 1.1.1.1 has 00000001 in 2nd octet ✗."
   },
 
   // Q4
@@ -76,7 +76,7 @@ registerTopic("Network layer & IP",
   // Q6
   {
     question: "An Internet router has the following entries in its forwarding table:<br><ul><li>IP prefix 5.0.0.0/8 --> output link 1.</li><li>IP prefix 5.0.0.0/24 --> output link 2.</li></ul>A packet arrives at the router with destination IP address 5.0.0.10. Which output link will the router choose?",
-    type: "mcq",
+    type: "scq",
     options: [
       "It could choose any of the two links, because they both match the destination IP address.",
       "Link 1, because 5.0.0.0/8 is the bigger of the two matching IP prefixes.",
@@ -89,7 +89,7 @@ registerTopic("Network layer & IP",
   // Q7
   {
     question: "What would happen if IP addresses were flat, hence not location-dependent?",
-    type: "mcq",
+    type: "scq",
     options: [
       "A router would not be able to perform IP forwarding.",
       "IP forwarding tables would be significantly bigger.",
@@ -102,7 +102,7 @@ registerTopic("Network layer & IP",
   // Q8
   {
     question: "Is it possible that two packets with the same destination IP address are going to (are intended for) two different destination end-systems? If multiple answers make sense, choose the single best one. To answer this question, do consider Network Address Translation (NAT).",
-    type: "mcq",
+    type: "scq",
     options: [
       "Yes, if the two destination end-systems are located in the same IP subnet.",
       "Yes, if the two destination end-systems are located behind the same NAT (Network Address Translation) gateway.",
@@ -115,7 +115,7 @@ registerTopic("Network layer & IP",
   // Q9
   {
     question: "How does link-state routing differ from distance-vector routing?",
-    type: "mcq",
+    type: "scq",
     options: [
       "They are the same thing.",
       "They try to achieve the same goal but using different types of algorithms.",

@@ -7,7 +7,7 @@ registerTopic("C Training",
 <pre>geometry.c: In function 'surface':
 geometry.c:5:10: warning: implicit declaration of function 'dot_product'</pre>
 What should you consider doing <em>first</em> in order to get rid of that error?`,
-    type: "mcq",
+    type: "scq",
     options: [
       "Nothing, it's just a warning.",
       "Add a definition of dot_product() in geometry.c",
@@ -28,7 +28,7 @@ What should you consider doing <em>first</em> in order to get rid of that error?
 <pre>/usr/bin/ld: geometry.o: in function \`surface':
 geometry.c:5:(.text+0x20): undefined reference to \`dot_product'</pre>
 What should you consider doing <em>first</em> in order to get rid of that error?`,
-    type: "mcq",
+    type: "scq",
     options: [
       "Include vector.h in geometry.c",
       "Something else than the other proposals.",
