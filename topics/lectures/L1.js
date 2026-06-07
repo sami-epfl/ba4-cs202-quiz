@@ -1,4 +1,4 @@
-registerTopic("L1 - Intro I",
+registerTopic("Lectures - L1 - Intro I",
 
   {
     type: "flashcard",

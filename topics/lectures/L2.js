@@ -1,4 +1,4 @@
-registerTopic("L2 - Intro II",
+registerTopic("Lectures - L2 - Intro II",
   {
     type: "flashcard",
     question: "What is an Operating System (OS)?",
