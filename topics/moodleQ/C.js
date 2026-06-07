@@ -811,6 +811,76 @@ for (size_t i = 0; i < n; ++i) {
     explanation: "<code>fread(tab, sizeof(double), n, myfile)</code> reads exactly <code>n</code> elements of <code>sizeof(double)</code> bytes each from the binary file into <code>tab</code>, and returns the number of elements successfully read ✓<br>• <code>fscanf</code> is for text files, not binary ✗<br>• <code>fread(tab, n*sizeof(double), 1, myfile)</code> returns 0 or 1 (number of blocks), not the number of doubles — can't detect partial reads ✗<br>• <code>&tab[1]</code> skips the first element ✗"
   },
 
+  // Quiz 13 on moodle
+  // Q7
+  {
+    question: `Consider the following C program:<br>
+<pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void f(int* q) {
+    q = malloc(sizeof(int));
+    *q = 45;
+}
+
+int main(void) {
+    int i = 3;
+    int* ptr = &i;
+    f(ptr);
+    printf("%d %d\\n", i, *ptr);
+    return 0;
+}</pre>
+Tick all the correct statements.<br><b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "It does not compile.",
+      "It prints \"3 3\".",
+      "It prints \"3 45\".",
+      "It prints \"45 45\".",
+      "It makes a memory error (like \"Segmentation Fault\" or \"double free\", etc.).",
+      "It has a memory leak.",
+      "All the other statements are false."
+    ],
+    answer: [1, 5],
+    explanation: "<code>f</code> receives <code>q</code> by value (a copy of <code>ptr</code>). Inside <code>f</code>, <code>q = malloc(...)</code> rebinds the local copy — the original <code>ptr</code> in <code>main</code> is unchanged and still points to <code>i</code>.<br>So <code>i=3</code> and <code>*ptr=3</code> → prints <b>\"3 3\"</b> ✓<br>The <code>malloc</code>'d memory is never freed → <b>memory leak</b> ✓"
+  },
+
+  // Q8
+  {
+    question: `Consider the following C program:<br>
+<pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+
+double* f(double* q) {
+    q = malloc(sizeof(double));
+    *q = log(3.0); // 1.098612
+    return q;
+}
+
+int main(void) {
+    double x = 9.8;
+    double* ptr1 = &x;
+    double* ptr2 = f(ptr1);
+    printf("%f\\n", *ptr2);
+    free(ptr1);
+    return 0;
+}</pre>
+Tick all the correct statements.<br><b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "It does not compile.",
+      "It prints \"9.8\".",
+      "It prints \"1.098612\".",
+      "It prints something else than the above two proposals.",
+      "It makes a memory error (like \"Segmentation Fault\" or \"double free\", etc.).",
+      "It has a memory leak.",
+      "All the other statements are false."
+    ],
+    answer: [2, 4, 5],
+    explanation: "<code>f</code> ignores the passed pointer and allocates new heap memory, sets it to <code>log(3.0)≈1.098612</code>, returns it. <code>ptr2</code> gets this new pointer → <code>*ptr2 = 1.098612</code> → prints <b>\"1.098612\"</b> ✓<br><code>free(ptr1)</code>: <code>ptr1</code> points to <code>x</code>, a stack variable — freeing a stack address is <b>undefined behavior / memory error</b> ✓<br>The malloc'd memory returned in <code>ptr2</code> is never freed → <b>memory leak</b> ✓"
+  },
+
   // Quiz 11 on moodle
   // Q16
   {
