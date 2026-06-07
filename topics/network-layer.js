@@ -12,7 +12,7 @@ registerTopic("Network layer & IP",
       "The TCP protocol can only run on top of a circuit-switched network (a packet-switched network cannot support TCP connections).",
       "The Internet network layer uses packet switching."
     ],
-    answer: 1,
+    answer: [1, 4],
     explanation: "Correct answers: (b) and (e). In a circuit-switched network, each router keeps state about each ongoing connection. The Internet network layer uses packet switching."
   },
 
@@ -26,7 +26,7 @@ registerTopic("Network layer & IP",
       "A forwarding operation takes place every time a router receives a packet.",
       "The output of routing is necessary for forwarding."
     ],
-    answer: 2,
+    answer: [1, 2, 3],
     explanation: "Correct answers: (b), (c), and (d). Routing determines the contents of forwarding tables. A forwarding operation takes place every time a router receives a packet. The output of routing is necessary for forwarding."
   },
 
@@ -40,7 +40,7 @@ registerTopic("Network layer & IP",
       "1.0.0.0/24",
       "1.0.0.0/16"
     ],
-    answer: 0,
+    answer: [0, 1],
     explanation: "Correct answers: (a) 1.0.0.0/8 and (b) 1.1.1.0/31. — 1.0.0.0/8 matches the first 8 bits (00000001); 1.1.1.1 starts with 00000001 ✓. — 1.1.1.0/31 matches the first 31 bits; range is 1.1.1.0–1.1.1.1, so 1.1.1.1 is included ✓. — 1.0.0.0/24 requires first 24 bits = 00000001.00000000.00000000 but 1.1.1.1 has 00000001 in 2nd octet ✗. — 1.0.0.0/16 requires first 16 bits = 00000001.00000000 but 1.1.1.1 has 00000001 in 2nd octet ✗."
   },
 
@@ -54,7 +54,7 @@ registerTopic("Network layer & IP",
       "The destination IP address in the packet's network-layer header.",
       "The router's forwarding table."
     ],
-    answer: 2,
+    answer: [2, 3],
     explanation: "Correct answers: (c) and (d). The router uses the destination IP address and its forwarding table (longest-prefix match) to decide the output link. Source IP and packet content are not used in standard IP forwarding."
   },
 
@@ -69,7 +69,7 @@ registerTopic("Network layer & IP",
       "Given any global IP address X, any forwarding table contains at least one entry -- an IP prefix -- that matches X.",
       "A forwarding table contains one entry per local IP subnet (among other things)."
     ],
-    answer: 1,
+    answer: [1, 3, 4],
     explanation: "Correct answers: (b), (d), and (e). A forwarding table contains one entry (or a few) per foreign AS, one entry per local IP subnet, and a default route ensuring every global IP address matches at least one entry."
   },
 
@@ -135,7 +135,7 @@ registerTopic("Network layer & IP",
       "The number of IP subnets in the Internet.",
       "The number of ongoing TCP connections that go through the router."
     ],
-    answer: 0,
+    answer: [0, 1],
     explanation: "Correct answers: (a) and (b). Each AS contributes one or a few prefix entries; each local subnet contributes one entry. Remote subnets are aggregated per AS, not listed individually. TCP connections don't affect the forwarding table."
   },
 
@@ -149,7 +149,7 @@ registerTopic("Network layer & IP",
       "An Autonomous System (AS) is the same thing as an IP subnet.",
       "An IP subnet typically contains multiple Autonomous Systems (ASes)."
     ],
-    answer: 0,
+    answer: [0, 1],
     explanation: "Correct answers: (a) and (b). An AS is a large administrative domain (e.g. a university, ISP) typically containing many IP subnets. Each IP subnet has at least one first-hop router. An AS is not the same as a subnet, and subnets don't contain multiple ASes."
   },
 
@@ -163,7 +163,7 @@ registerTopic("Network layer & IP",
       "All the routers in the Internet must run the same routing protocol, otherwise global connectivity cannot be achieved.",
       "The border routers of all Autonomous Systems (ASes) in the Internet run the inter-AS routing protocol (BGP)."
     ],
-    answer: 1,
+    answer: [1, 3],
     explanation: "Correct answers: (b) and (d). All routers within an AS run the intra-AS routing protocol (e.g. OSPF). The border routers of all ASes run BGP. Only border routers run BGP — not all first-hop routers. Different ASes can use different intra-AS protocols."
   }
 );
