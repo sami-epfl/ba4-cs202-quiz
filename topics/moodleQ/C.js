@@ -811,4 +811,87 @@ for (size_t i = 0; i < n; ++i) {
     explanation: "<code>fread(tab, sizeof(double), n, myfile)</code> reads exactly <code>n</code> elements of <code>sizeof(double)</code> bytes each from the binary file into <code>tab</code>, and returns the number of elements successfully read ✓<br>• <code>fscanf</code> is for text files, not binary ✗<br>• <code>fread(tab, n*sizeof(double), 1, myfile)</code> returns 0 or 1 (number of blocks), not the number of doubles — can't detect partial reads ✗<br>• <code>&tab[1]</code> skips the first element ✗"
   },
 
+  // Quiz 11 on moodle
+  // Q16
+  {
+    question: `On a 64-bit architecture, with<br>
+<pre>const char* s1 = "12345";
+char tab1[] = "43210";</pre>
+and<br>
+<pre>void f(const char* s2, char tab2[]);</pre>
+which of the following statements are true?<br>
+Statements involving s1 and tab1 are (of course) considered in the scope of s1 and tab1;<br>
+statements involving s2 and tab2 are considered in the body of f() and evaluated during the call f(s1, tab1).<br>
+<b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "sizeof(s1) == strlen(s1)",
+      "sizeof(tab1) == strlen(tab1)",
+      "sizeof(s1) == sizeof(tab1)",
+      "strlen(s1) == strlen(tab1)",
+      "sizeof(s2) == strlen(s2)",
+      "sizeof(tab2) == strlen(tab2)",
+      "sizeof(s2) == sizeof(tab2)",
+      "strlen(s2) == strlen(tab2)",
+      "None of the others, some code does not compile or does not run properly."
+    ],
+    answer: [3, 6, 7],
+    explanation: "• <code>sizeof(s1)</code>=8 (pointer on 64-bit), <code>strlen(s1)</code>=5 → not equal ✗<br>• <code>sizeof(tab1)</code>=6 (array includes '\\0'), <code>strlen(tab1)</code>=5 → not equal ✗<br>• <code>sizeof(s1)</code>=8 ≠ <code>sizeof(tab1)</code>=6 ✗<br>• <code>strlen(s1)</code>=5 == <code>strlen(tab1)</code>=5 ✓<br>• Inside f, s2 is a pointer: <code>sizeof(s2)</code>=8, <code>strlen(s2)</code>=5 → not equal ✗<br>• Inside f, tab2 decays to a pointer: <code>sizeof(tab2)</code>=8, <code>strlen(tab2)</code>=5 → not equal ✗<br>• <code>sizeof(s2)</code>=8 == <code>sizeof(tab2)</code>=8 (both pointers) ✓<br>• <code>strlen(s2)</code>=5 == <code>strlen(tab2)</code>=5 ✓"
+  },
+
+  // Q17
+  {
+    question: `Consider the following function:<br>
+<pre>void incr(char** ptr)
+{
+  ++ptr;
+}</pre>
+and the following code <em>excerpt</em> (i.e a <em>part</em> of a code that is elsewhere correct),<br>
+where you have to add two instructions, one for u and one for v:<br>
+<pre>char msg[]   = "CS-202";
+char* tab[]  = { msg + 1, msg + 3 };
+char* p      = msg + sizeof(msg) - 1;
+
+char** u = tab;
+char** v = &p;
+
+incr(u);
+
+// add one statement on u
+
+// add one statement on v
+
+for (char* r = *u; r < *v; ++r) putchar(*r);</pre>
+What should be added (one instruction for u and one instruction for v) so that the above code prints "20"?<br>
+<b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "None of the proposals, the proposed code cannot compile.",
+      "None of the proposals, the proposed code will \"seg fault\" anyway.",
+      "u = u; // do nothing for u",
+      "++u;",
+      "--u;",
+      "u += 2;",
+      "u -= 2;",
+      "Something else has to be done on u.",
+      "v = v; // do nothing on v",
+      "--v;",
+      "--(*v);",
+      "v = *--v;",
+      "*v--;",
+      "incr(v);",
+      "++(*v);",
+      "*v++;",
+      "Something else has to be done on v."
+    ],
+    answer: [3, 10],
+    explanation: `msg = "CS-202": indices 0='C',1='S',2='-',3='2',4='0',5='2',6='\\0'<br>
+tab = { msg+1, msg+3 } → tab[0]="S-202", tab[1]="202"<br>
+p = msg+6 (points to '\\0')<br>
+u=tab, v=&p. <code>incr(u)</code> increments a local copy of u — u is unchanged, still points to tab[0].<br>
+<b>++u</b>: u now points to tab[1], so *u = msg+3 (='2') ✓<br>
+<b>--(*v)</b>: *v is p; decrements p from msg+6 to msg+5 ✓<br>
+Loop: r goes from msg+3 to msg+4 (r < msg+5): prints '2','0' → <b>"20"</b> ✓`
+  },
+
 );
