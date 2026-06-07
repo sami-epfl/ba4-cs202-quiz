@@ -342,6 +342,68 @@ What does it print?`,
     explanation: "<code>p</code> points to <code>x</code> (=1.2). Inside <code>f</code>, <code>ptr</code> is a local copy — <code>ptr = &a</code> only changes the local copy, not <code>p</code> in main. So <code>*p</code> still = <b>1.2</b>."
   },
 
+  // Quiz 4 on moodle
+  // Q8
+  {
+    question: `Considering <code>double** tab;</code> and provided that enough memory has been allocated for 4 lines and 4 columns, each of the same length (4), then <code>tab[2][0]</code> always comes in memory right after <code>tab[1][3]</code>.`,
+    type: "scq",
+    options: [
+      "True.",
+      "False, it's tab[1][4] which comes in memory right after tab[1][3].",
+      "False in general (it can be, but this is not ensured).",
+      "The question does not make sense since tab[1][3] is not valid syntax.",
+      "False, it's tab[2][3] which comes in memory right after tab[1][3]."
+    ],
+    answer: 2,
+    explanation: "<code>double**</code> is a pointer to pointers — each row is separately allocated in memory. Unlike a 2D array (<code>double tab[4][4]</code>), the rows are <b>not guaranteed to be contiguous</b> in memory. So <code>tab[2][0]</code> may or may not be right after <code>tab[1][3]</code>."
+  },
+
+  // Q9
+  {
+    question: `What does the following code <em>excerpt</em> print?<br>
+<pre>int matrix[] = { 1, 3, 5, 7, 9, 11 };
+
+putchar('x');
+int i = 123;
+int* ptr = matrix + 1;
+while ((i = *ptr++) &lt; 9) { printf("%d", i); }</pre>`,
+    type: "scq",
+    options: [
+      "x7",
+      "Nothing because it does not compile.",
+      "x13579",
+      "x357",
+      "x1357",
+      "Something else than the other proposals.",
+      "x3579",
+      "x57",
+      "x123",
+      "x"
+    ],
+    answer: 3,
+    explanation: "<code>ptr = matrix + 1</code> → points to matrix[1] = 3.<br>Loop: <code>i = *ptr++</code> assigns then advances ptr.<br>• i=3 (ptr→5): 3 &lt; 9 → print \"3\"<br>• i=5 (ptr→7): 5 &lt; 9 → print \"5\"<br>• i=7 (ptr→9): 7 &lt; 9 → print \"7\"<br>• i=9 (ptr→11): 9 &lt; 9 is false → stop<br>Output: <b>x357</b>"
+  },
+
+  // Q10
+  {
+    question: `On a 64-bit architecture, what does the following code print?<br>
+<pre>const char* s = "123456";
+printf("%zu\\n", sizeof(s));</pre>
+<small>Note: <code>%zu</code> is the correct format to print <code>size_t</code> values.</small>`,
+    type: "scq",
+    options: [
+      "5",
+      "6",
+      "7",
+      "8",
+      "Nothing, it does not compile.",
+      "Some unknown value that cannot be determined from the provided informations.",
+      "Another (known) value, different from the above proposed propositions."
+    ],
+    answer: 3,
+    explanation: "<code>sizeof(s)</code> gives the size of the <b>pointer</b> <code>s</code>, not the string it points to. On a <b>64-bit architecture</b>, a pointer is <b>8 bytes</b>. (The string length is 6, and strlen would return 6, but sizeof on a pointer = 8.)"
+  },
+
   // Quiz 3 on moodle
   // Q8 — one sub-question per function
   {
