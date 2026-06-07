@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q03 Client/server & web",
+registerTopic("Moodle - Q03 - Client/server & web",
 
   // Q1
   {

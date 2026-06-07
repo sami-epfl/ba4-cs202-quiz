@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q06 TCP & UDP",
+registerTopic("Moodle - Q06 - TCP & UDP",
 
   // Q1
   {

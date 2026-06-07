@@ -1,4 +1,4 @@
-registerTopic("Moodle - C questions",
+registerTopic("Moodle - C - Questions",
 
   // Quiz 2 on moodle
   // Q1

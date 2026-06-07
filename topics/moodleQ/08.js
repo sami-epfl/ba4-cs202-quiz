@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q08 Network layer & IP",
+registerTopic("Moodle - Q08 - Network layer & IP",
 
   // Quiz Week 8 on moodle
   // Q1

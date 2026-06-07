@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q13 Scheduling & Thread States",
+registerTopic("Moodle - Q13 - Scheduling & Thread States",
 
   // Q1
   {

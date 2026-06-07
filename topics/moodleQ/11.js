@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q11 Files, CPU & OS",
+registerTopic("Moodle - Q11 - Files, CPU & OS",
 
   // Q1
   {

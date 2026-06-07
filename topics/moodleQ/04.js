@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q04 Sockets, Files & Syscalls",
+registerTopic("Moodle - Q04 - Sockets, Files & Syscalls",
 
   // Q1
   {

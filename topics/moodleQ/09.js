@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q09 Link Layer, MAC & ARP",
+registerTopic("Moodle - Q09 - Link Layer, MAC & ARP",
 
   // Q1
   {
