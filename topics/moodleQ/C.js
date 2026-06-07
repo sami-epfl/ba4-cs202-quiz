@@ -342,6 +342,97 @@ What does it print?`,
     explanation: "<code>p</code> points to <code>x</code> (=1.2). Inside <code>f</code>, <code>ptr</code> is a local copy — <code>ptr = &a</code> only changes the local copy, not <code>p</code> in main. So <code>*p</code> still = <b>1.2</b>."
   },
 
+  // Quiz 6 on moodle
+  // Q9
+  {
+    question: `You have a library function:<br>
+<pre>void transform(const Object* obj, uint16_t** tab, size_t* size);</pre>
+Its purpose is to allocate an array of <code>uint16_t</code> and to provide its size back.<br>
+Assume you have a valid <code>Object o</code>.<br>
+What is the <em>proper</em> way to declare <code>tab</code> and <code>size</code> and to call <code>transform()</code>?`,
+    type: "scq",
+    options: [
+      "uint16_t tab[10] = {0};\nsize_t s = 10;\ntransform(&o, &tab, &s);",
+      "size_t s = 3;\nuint16_t tab[s];\ntransform(&o, &tab, &s);",
+      "uint16_t** tab = malloc(sizeof(uint16_t*));\nsize_t* s = malloc(sizeof(size_t));\ntransform(&o, tab, s);",
+      "Something else (none of the others).",
+      "uint16_t** tab;\nsize_t* s;\ntransform(&o, tab, s);",
+      "uint16_t* tab = NULL;\nsize_t s;\ntransform(&o, &tab, &s);"
+    ],
+    answer: 5,
+    explanation: "<code>transform</code> takes <code>uint16_t**</code> and <code>size_t*</code> — it will allocate the array and write the pointer and size back.<br>So we need: <code>uint16_t* tab</code> (so <code>&tab</code> is <code>uint16_t**</code>) and <code>size_t s</code> (so <code>&s</code> is <code>size_t*</code>).<br>Initializing <code>tab = NULL</code> is good practice before letting the function allocate it."
+  },
+
+  // Q10
+  {
+    question: `Assume you have a type <code>Car</code> with a field <code>price</code>.<br>
+Which of the following functions can you pass (maybe with some casting) to <code>qsort()</code> to sort by <code>price</code> an array of <code>Car</code>?<br>
+<b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "None of these functions (they are all wrong in one way or another).",
+`int comp(const void* p1, const void* p2)
+{
+    if (p1->price < p2->price) return -1;
+    if (p1->price > p2->price) return 1;
+    return 0;
+}`,
+`int comp(const void* p1, const void* p2)
+{
+    const Car * const q1 = p1;
+    const Car * const q2 = p2;
+    if (q1->price < q2->price) return -1;
+    if (q1->price > q2->price) return 1;
+    return 0;
+}`,
+`int comp(const Car* p1, const Car* p2)
+{
+    if (p1->price < p2->price) return -1;
+    if (p1->price > p2->price) return 1;
+    return 0;
+}`
+    ],
+    answer: [2, 3],
+    explanation: "• Option 2 ✓: casts <code>void*</code> to <code>const Car*</code> before dereferencing — correct qsort comparator pattern<br>• Option 3 ✓: takes <code>const Car*</code> directly — can be passed to qsort with a cast to the comparator type<br>• Option 1 ✗: tries to dereference <code>void*</code> directly — invalid in C, void* has no fields"
+  },
+
+  // Q11
+  {
+    question: `Consider the following definitions:<br>
+<pre>typedef unsigned char byte;
+
+size_t size(byte tab[])
+{ return sizeof(tab) / sizeof(tab[0]); }
+
+void yes(int i)
+{ if (i) puts("yes"); else puts("no"); }
+
+byte tab1[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9, 8 };
+byte tab2[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 9 };
+byte tab3[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 3 };
+byte tab4[] = { 9, 8, 7, 6, 5, 4, 3, 2, 0 };
+
+const size_t s2 = 11;
+const size_t s4 =  9;</pre>
+Which of the following statements below will print "yes"?<br>(You can consider the architecture to be 64 bits.)<br><b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "yes(!strcmp(tab1, tab1));",
+      "yes(!strcmp(tab1, tab2));",
+      "yes(!strcmp(tab1, tab3));",
+      "yes(!strcmp(tab1, tab4));",
+      "yes(!strncmp(tab1, tab2, s2));",
+      "yes(!strncmp(tab1, tab3, s2));",
+      "yes(!strncmp(tab1, tab4, s4));",
+      "yes(!strncmp(tab1, tab2, size(tab2)));",
+      "yes(!strncmp(tab1, tab3, size(tab3)));",
+      "yes(!strncmp(tab1, tab4, size(tab4)));",
+      "None of them, the code is incorrect."
+    ],
+    answer: [0, 1, 2, 4, 5, 7, 8, 9],
+    explanation: "All arrays have a <code>0</code> byte acting as a null terminator.<br>• <b>strcmp</b> stops at the first 0: tab1, tab2, tab3 all have 0 at index 9 → first 9 bytes identical → equal ✓. tab4 has 0 at index 8, tab1[8]=1 → different ✗<br>• <b>strncmp(tab1, tab2, s2=11)</b>: both hit 0 at index 9 before n=11 → equal ✓<br>• <b>strncmp(tab1, tab3, s2=11)</b>: same, 0 at index 9 → equal ✓<br>• <b>strncmp(tab1, tab4, s4=9)</b>: tab4[8]=0, tab1[8]=1 → differ ✗<br>• <b>size(tab)</b> inside a function receives a pointer, so sizeof(tab)=8 (pointer size on 64-bit), size() returns 8 for all. strncmp with n=8 compares only first 8 bytes (indices 0–7) which are identical for all arrays ✓"
+  },
+
   // Quiz 4 on moodle
   // Q8
   {
