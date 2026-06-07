@@ -342,6 +342,208 @@ What does it print?`,
     explanation: "<code>p</code> points to <code>x</code> (=1.2). Inside <code>f</code>, <code>ptr</code> is a local copy — <code>ptr = &a</code> only changes the local copy, not <code>p</code> in main. So <code>*p</code> still = <b>1.2</b>."
   },
 
+  // Quiz 3 on moodle
+  // Q8 — one sub-question per function
+  {
+    question: `Consider <code>char string[] = "Hello world!"</code>.<br>What does <b>f1</b> return when called on <code>string</code>?<br><pre>char* f1(char* s) { return strstr(s, "Hello"); }</pre>`,
+    type: "scq",
+    options: [
+      "returns \"Hello\" (no trailing whitespace)",
+      "returns \"Hello world!\"",
+      "does not compile",
+      "crashes (Segmentation Fault)",
+      "returns \"\" (empty string)"
+    ],
+    answer: 1,
+    explanation: "<code>strstr(s, \"Hello\")</code> returns a pointer to the first occurrence of \"Hello\" in s. Since s starts with \"Hello\", it returns a pointer to the beginning of s — i.e. <b>\"Hello world!\"</b>."
+  },
+
+  {
+    question: `Consider <code>char string[] = "Hello world!"</code>.<br>What does <b>f2</b> return when called on <code>string</code>?<br><pre>char* f2(char* s1) { char s2[5] = s1; return s2; }</pre>`,
+    type: "scq",
+    options: [
+      "returns \"Hello\" (no trailing whitespace)",
+      "returns \"Hello world!\"",
+      "does not compile",
+      "crashes (Segmentation Fault)",
+      "returns \"\" (empty string)"
+    ],
+    answer: 2,
+    explanation: "<code>char s2[5] = s1</code> is invalid C — you cannot initialize an array with a pointer. This <b>does not compile</b>."
+  },
+
+  {
+    question: `Consider <code>char string[] = "Hello world!"</code>.<br>What does <b>f3</b> return when called on <code>string</code>?<br><pre>char* f3(char* s1) { char* s2 = s1; s2[5] = '\\0'; return s1; }</pre>`,
+    type: "scq",
+    options: [
+      "returns \"Hello\" (no trailing whitespace)",
+      "returns \"Hello world!\"",
+      "does not compile",
+      "crashes (Segmentation Fault)",
+      "returns \"\" (empty string)"
+    ],
+    answer: 0,
+    explanation: "<code>s2 = s1</code> → s2 points to the same char array. <code>s2[5] = '\\0'</code> inserts a null terminator at index 5 (the space), so the string becomes \"Hello\". Returns s1 which now points to <b>\"Hello\"</b>."
+  },
+
+  {
+    question: `Consider <code>char string[] = "Hello world!"</code>.<br>What does <b>f4</b> return when called on <code>string</code>?<br><pre>char* f4(char* s1) { char* s2 = NULL; strncpy(s2, s1, 5); return s2; }</pre>`,
+    type: "scq",
+    options: [
+      "returns \"Hello\" (no trailing whitespace)",
+      "returns \"Hello world!\"",
+      "does not compile",
+      "crashes (Segmentation Fault)",
+      "returns \"\" (empty string)"
+    ],
+    answer: 3,
+    explanation: "<code>s2 = NULL</code> then <code>strncpy(s2, s1, 5)</code> tries to write to address NULL → <b>Segmentation Fault</b>."
+  },
+
+  {
+    question: `Consider <code>char string[] = "Hello world!"</code>.<br>What does <b>f5</b> return when called on <code>string</code>?<br><pre>char* f5(char* s) { s += 5; *s = 0; return s; }</pre>`,
+    type: "scq",
+    options: [
+      "returns \"Hello\" (no trailing whitespace)",
+      "returns \"Hello world!\"",
+      "does not compile",
+      "crashes (Segmentation Fault)",
+      "returns \"\" (empty string)"
+    ],
+    answer: 4,
+    explanation: "<code>s += 5</code> → s points to \" world!\". <code>*s = 0</code> sets the space character to '\\0'. Now s points to a string starting with '\\0' → <b>empty string \"\"</b>."
+  },
+
+  // Q9
+  {
+    question: "We want to write a generic function that can add all the elements of an array (of unknown type) and get the result of the sum (of unknown type), either as a return value or passed by reference.<br>What are the possible prototypes for such a function?<br><b>Penalty for wrong ticks.</b>",
+    type: "mcq",
+    options: [
+      "double add_all(void* tab, size_t el_size, size_t nb_el, double (*add_element)(void*, void*));",
+      "void* add_all(void* tab, size_t el_size, size_t nb_el, void* (*add_element)(void*, void*));",
+      "void* add_all(void* tab, void* (*add_element)(void*, void*));",
+      "void* add_all(void* tab, size_t el_size, size_t nb_el);",
+      "void* add_all(void* tab);",
+      "double add_all(void* tab, size_t el_size, size_t nb_el, void* (*add_element)(void*, void*));",
+      "int add_all(void* tab, size_t el_size, size_t nb_el, void* (*add_element)(void*, void*), void** result);",
+      "void* add_all(void* tab, size_t el_size, void* (*add_element)(void*, void*));"
+    ],
+    answer: [1, 6],
+    explanation: "The function needs: the array (<code>void*</code>), element size, element count, and a way to add two elements of unknown type (<code>void* (*add_element)(void*, void*)</code>). The result of unknown type can be returned as <code>void*</code> or passed by reference via <code>void** result</code> (with an int error code returned). Options 1 and 6 satisfy these constraints."
+  },
+
+  // Q10
+  {
+    question: "Assume that <code>x</code> is a <code>double</code> variable and that <code>f</code> is a pointer to a function taking a <code>double</code> and returning a <code>double</code>.<br>Tick all the possible calls to f.<br><b>Penalty for wrong ticks.</b>",
+    type: "mcq",
+    options: [
+      "x = f(&x);",
+      "x = *f(&x);",
+      "x = f(x);",
+      "x = (*f)(x);",
+      "x = *f(*x);",
+      "x = *f(x);",
+      "x = f(*x);",
+      "x = (*f)(&x);",
+      "x = (*f)(*x);",
+      "None of these calls is possible."
+    ],
+    answer: [2, 3],
+    explanation: "<code>f</code> is a function pointer taking a double. Valid calls:<br>• <code>f(x)</code>: direct call via pointer ✓<br>• <code>(*f)(x)</code>: explicit dereference of function pointer ✓<br>Others are wrong: <code>f(&x)</code> passes a pointer but f takes a double ✗; <code>*f(x)</code> tries to dereference the double return value ✗"
+  },
+
+  // Q11
+  {
+    question: "Select all the <em>correct</em> statements about a <code>void*</code> variable.<br><b>Penalty for wrong ticks.</b>",
+    type: "mcq",
+    options: [
+      "It can point only into the heap.",
+      "It cannot exist in C (invalid C).",
+      "It is always NULL.",
+      "It can point only into the stack.",
+      "It can point to any type.",
+      "It does not require any explicit casting to be assigned to another pointer.",
+      "It cannot be used.",
+      "It does not point anywhere.",
+      "It is useless."
+    ],
+    answer: [4, 5],
+    explanation: "<code>void*</code> is a generic pointer in C:<br>• It can point to any memory location (stack, heap, globals) ✓<br>• In C (not C++), <code>void*</code> can be assigned to/from any pointer type without explicit cast ✓<br>All other statements are false."
+  },
+
+  // Q12
+  {
+    question: "What is the correct way to define a type <code>funct</code> to point to a function taking a pointer to an <code>int</code> and returning a pointer to an <code>int</code>?",
+    type: "scq",
+    options: [
+      "typedef *int funct*(int*);",
+      "typedef int*(*funct)(int*);",
+      "None of the others",
+      "typedef (int*) *funct(int*);",
+      "typedef int* *funct(int*);",
+      "typedef *int (*funct)(int*);",
+      "typedef int* funct*(int*);",
+      "typedef *int (*funct)(*int);"
+    ],
+    answer: 1,
+    explanation: "The pattern for a function pointer typedef is: <code>typedef &lt;return_type&gt; (*&lt;name&gt;)(&lt;params&gt;)</code>.<br>Here: return type = <code>int*</code>, name = <code>funct</code>, param = <code>int*</code> → <b><code>typedef int*(*funct)(int*);</code></b>"
+  },
+
+  // Q13
+  {
+    question: `Given <code>char* msg = "Great";</code>, tick each of the following statements which are <u>incorrect</u> (considered separately).<br><b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      'char msg2[8] = ""; strcpy(msg2, msg);',
+      "char msg2[20] = msg;",
+      "char* msg2 = malloc(msg.size());",
+      "char* msg2 = msg + '!'; // append",
+      'char* msg2 = strncat(msg, " day!", 5);',
+      "char* msg2 = malloc(msg.length());",
+      "const char* msg2 = msg;"
+    ],
+    answer: [1, 2, 3, 4, 5],
+    explanation: "Incorrect statements:<br>• <code>char msg2[20] = msg</code>: cannot initialize array with pointer ✗<br>• <code>malloc(msg.size())</code>: msg is a C pointer, not a C++ object — no .size() method ✗<br>• <code>msg + '!'</code>: adds the ASCII value of '!' (33) to the pointer — not an append ✗<br>• <code>strncat(msg, ...)</code>: msg points to a string literal (read-only memory) — undefined behavior ✗<br>• <code>malloc(msg.length())</code>: same issue, no .length() in C ✗<br>Correct: <code>char msg2[8] = \"\"; strcpy(msg2, msg)</code> ✓ and <code>const char* msg2 = msg</code> ✓"
+  },
+
+  // Q14
+  {
+    question: `What does the following code print?<br>
+<pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+void f(char* string)
+{
+  const size_t len = strlen(string);
+  if (len >= 2) string[1] = 'e';
+  if (len >= 6) string[5] = '\\0';
+  puts(string);
+}
+
+int main(void)
+{
+  f("Hallo world!");
+  return 0;
+}</pre>`,
+    type: "scq",
+    options: [
+      "Hallo world!",
+      "Hello",
+      "Nothing (but an error message) because the code does not run properly (e.g. Segmentation Fault).",
+      "eallo world!",
+      "eallo",
+      "Hello world!",
+      "Hallo",
+      "Hello world!",
+      "eall0 world!",
+      "Something else than the other proposals.",
+      "Hallo0world!",
+      "Nothing because the code does not compile."
+    ],
+    answer: 2,
+    explanation: "<code>\"Hallo world!\"</code> is a <b>string literal</b> stored in read-only memory. Attempting to modify it (<code>string[1] = 'e'</code>) causes a <b>Segmentation Fault</b> at runtime."
+  },
+
   // Quiz Week 8 on moodle
   // Q13
   {
