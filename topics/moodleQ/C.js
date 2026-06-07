@@ -342,6 +342,77 @@ What does it print?`,
     explanation: "<code>p</code> points to <code>x</code> (=1.2). Inside <code>f</code>, <code>ptr</code> is a local copy — <code>ptr = &a</code> only changes the local copy, not <code>p</code> in main. So <code>*p</code> still = <b>1.2</b>."
   },
 
+  // Quiz 9 on moodle
+  // Q8
+  {
+    question: `What are all the proper ways to initialize a variable <code>a</code> of the following type?<br>
+<pre>struct some_type {
+    size_t s;
+    double tab[3];
+};</pre>
+<b>Penalty for wrong ticks.</b>`,
+    type: "mcq",
+    options: [
+      "None of the other.",
+`struct some_type a;
+a.s = 0;
+a.tab = { 0.0, 0.0, 0.0 };`,
+`struct some_type {
+  size_t s = 0;
+  double tab[3] = { 0.0 };
+};`,
+`struct some_type a;
+a.s = 0;
+const double init[] = { 0.0, 0.0, 0.0 };
+a.tab = init;`,
+      "struct some_type a = { 0, { 1.0 } };",
+`struct some_type a;
+memset(&a, 0, sizeof(a));`
+    ],
+    answer: [4, 5],
+    explanation: "• <code>struct some_type a = { 0, { 1.0 } }</code>: valid aggregate initialization — s=0, tab={1.0, 0.0, 0.0} ✓<br>• <code>memset(&a, 0, sizeof(a))</code>: zeroes all bytes — valid for zero-initialization ✓<br>• <code>a.tab = { ... }</code>: cannot assign to array after declaration ✗<br>• <code>size_t s = 0</code> in struct definition: invalid in C (no default values in struct) ✗<br>• <code>a.tab = init</code>: cannot assign arrays ✗"
+  },
+
+  // Q9
+  {
+    question: "What is the proper way to augment the size (up to <code>newsize</code>) of an already allocated pointer <code>ptr</code>?<br><small>(tmp is a pointer of the same type as ptr)</small>",
+    type: "scq",
+    options: [
+      "ptr = realloc(newsize);",
+      "realloc(ptr, newsize);",
+      "tmp = realloc(ptr, newsize);",
+      "ptr = realloc(ptr, newsize);",
+      "Something else than the other proposals.",
+      "tmp = realloc(ptr, newsize); if (tmp != NULL) ptr = tmp;"
+    ],
+    answer: 5,
+    explanation: "The correct pattern for safe realloc:<br><code>tmp = realloc(ptr, newsize); if (tmp != NULL) ptr = tmp;</code><br>• If <code>realloc</code> fails it returns NULL — using <code>ptr = realloc(ptr, newsize)</code> would overwrite ptr with NULL, losing the original allocation ✗<br>• Using a temporary pointer lets you check for failure before updating ptr ✓"
+  },
+
+  // Q10
+  {
+    question: "What is the <u>proper</u> way to read an array of <code>n</code> <code>double</code> from a binary file <code>myfile</code> into <code>double tab[MAX]</code> (where <code>n &lt;= MAX</code>)?<br><small>Assume <code>count</code> is already declared with the proper type.</small>",
+    type: "scq",
+    options: [
+      "It's not possible in general since nb <= MAX; we must have nb < MAX instead.",
+      "count = fread(tab, sizeof(double), n, myfile);",
+      "another way than the other proposals",
+`count = 0;
+for (size_t i = 0; i < n; ++i) {
+  count += fscanf(myfile, "%lf", tab + i);
+}`,
+`count = 0;
+for (size_t i = 0; i < n; ++i) {
+  count += fread(&tab[i], sizeof(double), 1, myfile);
+}`,
+      "count = fread(tab, sizeof(n * double), 1, myfile);",
+      "count = fread(&tab[1], sizeof(double), n, myfile);",
+      "count = fread(tab, n * sizeof(double), 1, myfile);"
+    ],
+    answer: 1,
+    explanation: "<code>fread(tab, sizeof(double), n, myfile)</code> reads exactly <code>n</code> elements of <code>sizeof(double)</code> bytes each from the binary file into <code>tab</code>, and returns the number of elements successfully read ✓<br>• <code>fscanf</code> is for text files, not binary ✗<br>• <code>fread(tab, n*sizeof(double), 1, myfile)</code> returns 0 or 1 (number of blocks), not the number of doubles — can't detect partial reads ✗<br>• <code>&tab[1]</code> skips the first element ✗"
+  },
+
   // Quiz 6 on moodle
   // Q9
   {
