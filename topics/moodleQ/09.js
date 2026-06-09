@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q09 - Link Layer, MAC & ARP",
+const Q09 = [
 
   // Q1
   {
@@ -101,4 +101,4 @@ registerTopic("Moodle - Q09 - Link Layer, MAC & ARP",
     explanation: "In a single global IP subnet:<br>• No need for routers (routing is between subnets) → only link-layer switches ✓<br>• First packet to an unknown MAC → switch broadcasts to ALL devices in the world ✓<br>• Switches learn from traffic → with billions of devices, forwarding tables would be enormous ✓<br>• Switches do not run routing protocols ✗<br>• Switches always have forwarding tables ✗"
   }
 
-);
+];

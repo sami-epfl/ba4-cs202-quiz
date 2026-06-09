@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q08 - Network layer & IP",
+const Q08 = [
 
   // Quiz Week 8 on moodle
   // Q1
@@ -166,4 +166,4 @@ registerTopic("Moodle - Q08 - Network layer & IP",
     answer: [1, 3],
     explanation: "All routers within an AS run the intra-AS routing protocol (e.g. OSPF). The border routers of all ASes run BGP for inter-AS routing. Not all first-hop routers run BGP — only border routers do. Different ASes can also use different intra-AS protocols, so global connectivity does not require a single universal protocol."
   }
-);
+];

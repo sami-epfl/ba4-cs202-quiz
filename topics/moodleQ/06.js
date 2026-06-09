@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q06 - TCP & UDP",
+const Q06 = [
 
   // Q1
   {
@@ -110,4 +110,4 @@ registerTopic("Moodle - Q06 - TCP & UDP",
     explanation: "• <b>More syscalls for TCP</b>: TCP requires connection setup (connect/accept) and teardown ✓<br>• <b>UDP starts faster</b>: UDP has no handshake — P1 can send data immediately ✓<br>• <b>Higher UDP throughput</b>: TCP's slow start limits initial rate; UDP sends at full rate immediately ✓<br>• <b>Not identical patterns</b>: TCP slow start, flow control, and connection overhead make the patterns different ✗"
   }
 
-);
+];

@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q04 - Sockets, Files & Syscalls",
+const Q04 = [
 
   // Q1
   {
@@ -113,4 +113,4 @@ Based on the lecture slides, which of the following is true about Process A's la
     explanation: "The OS keeps a <b>reference count</b> of open file descriptors. When B deletes F while A still has it open (count > 0), the OS does not actually remove the file from storage — A can still use it. When A closes F, the count reaches 0 and the OS <b>actually deletes</b> the file. So when A tries to open F again, it <b>fails</b> — the file no longer exists on disk."
   }
 
-);
+];

@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q13 - Scheduling & Thread States",
+const Q13 = [
 
   // Q1
   {
@@ -86,4 +86,4 @@ registerTopic("Moodle - Q13 - Scheduling & Thread States",
     explanation: "In <b>FIFO</b>: threads run to completion in arrival order. T0 runs first (arrived t=0), then T1, then T2 — regardless of burst lengths, T2 <em>always</em> finishes last ✓<br>In <b>SJF</b>: if T2 has the shortest job, it may finish before T0 or T1 ✗<br>In <b>STCF</b>: preemptive, T2 could finish first if it has the shortest remaining time ✗<br>In <b>MLFQ</b>: T2 starts at highest priority and could run first ✗"
   }
 
-);
+];

@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q03 - Client/server & web",
+const Q03 = [
 
   // Q1
   {
@@ -98,4 +98,4 @@ registerTopic("Moodle - Q03 - Client/server & web",
     explanation: "The DNS client <b>caches</b> www.epfl.ch's IP address after the first lookup. For the second URL (same hostname), no DNS query is needed — the IP is served from cache immediately ✓<br>DNS translates only the <b>hostname</b> (www.epfl.ch), not the full path — path length is irrelevant ✗"
   }
 
-);
+];

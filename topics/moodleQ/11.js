@@ -1,4 +1,4 @@
-registerTopic("Moodle - Q11 - Files, CPU & OS",
+const Q11 = [
 
   // Q1
   {
@@ -216,4 +216,4 @@ registerTopic("Moodle - Q11 - Files, CPU & OS",
     explanation: "• Invoking a program (e.g. double-clicking) causes the OS to be notified via an <b>interrupt</b> (from the I/O device / window system) ✓<br>• Dividing by 0 causes a <b>trap/exception</b> — the CPU does not fix the value ✗<br>• A syscall jumps to the <b>kernel's</b> text segment, not the thread's own text segment ✗<br>• A privileged instruction by a low-privilege thread causes a <b>trap</b> — the CPU does not raise privilege for it ✗"
   }
 
-);
+];
