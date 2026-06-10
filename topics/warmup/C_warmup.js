@@ -1,4 +1,4 @@
-registerTopic("C Warmup",
+registerTopic("Warmup - C questions",
 
   // Basics
   {

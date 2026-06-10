@@ -2,7 +2,7 @@
 //  Layers explanation — CS202 Computer Networks key concepts
 // ============================================================
 
-registerTopic("Layers explanation",
+registerTopic("Warmup - Layers understanding",
 
   {
     type: "flashcard",

@@ -1,4 +1,4 @@
-registerTopic("Lectures - L1 - Intro I",
+registerTopic("Study Guide - Review intro lecture 1",
 
   {
     type: "flashcard",

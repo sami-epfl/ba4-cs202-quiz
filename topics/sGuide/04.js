@@ -1,4 +1,4 @@
-registerTopic("Lectures - L11 - File Systems",
+registerTopic("Study Guide - Review file systems lecture",
 
   {
     type: "flashcard",
@@ -119,4 +119,17 @@ registerTopic("Lectures - L11 - File Systems",
     answer: false,
     explanation: "File creation must use <code>creat()</code> or <code>open()</code> with the <b>O_CREAT</b> flag. You can open a directory with <code>dirfd = open(..., O_DIRECTORY, ...)</code> and create a file using <code>openat(dirfd, ..., O_CREAT, ...)</code>, but <b>not</b> with <code>write()</code>."
   },
+
+  {
+    type: "flashcard",
+    question: "How can you redirect STDOUT to a file in C (Method 1: close/open)?",
+    answer: "<b>Key idea:</b> <code>printf</code> writes to fd 1 (STDOUT) — not directly to the terminal. If we change what fd 1 points to before <code>printf</code> runs, the output goes there instead.<br><br><b>Method 1 — close/open:</b><br>1. <code>close(1)</code> — detaches fd 1 from the terminal; slot 1 in the fd table is now free.<br>2. <code>open(\"hello.txt\", O_CREAT | O_RDWR | O_TRUNC, S_IRWXU)</code> — <code>open</code> always assigns the <b>lowest available fd</b>; since 1 is free, it gets reused for hello.txt.<br>3. <code>printf</code> now writes to fd 1, which means hello.txt.<br><br><pre>close(1);\nopen(\"hello.txt\", O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);</pre>"
+  },
+
+  {
+    type: "flashcard",
+    question: "How can you redirect STDOUT to a file in C (Method 2: dup2)?",
+    answer: "<b>Method 2 — dup2 (more idiomatic):</b><br><code>dup2(fd, 1)</code> does the rewiring directly: it makes fd 1 refer to the same file as <code>fd</code>. It's atomic and doesn't rely on the 'lowest free fd' trick.<br><br>Step by step:<br>1. Open the file normally → get some fd (e.g. 3).<br>2. <code>dup2(fd, 1)</code> — points fd 1 to the same file (if fd 1 was open, it's closed first automatically).<br>3. <code>close(fd)</code> — drops the now redundant handle.<br><br><pre>int fd = open(\"hello.txt\", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);\ndup2(fd, 1);\nclose(fd);</pre>"
+  },
+
 );

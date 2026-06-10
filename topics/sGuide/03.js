@@ -1,4 +1,4 @@
-registerTopic("Lectures - L5 - Network & File Syscalls",
+registerTopic("Study Guide - Review syscalls lecture",
 
   {
     type: "flashcard",
