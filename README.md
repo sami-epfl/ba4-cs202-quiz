@@ -1,4 +1,4 @@
-# CS-202 — Quiz
+# CS-202 Computer systems— Quiz
 
 **[https://sami-epfl.github.io/ba4-cs202-quiz/](https://sami-epfl.github.io/ba4-cs202-quiz/)**
 
