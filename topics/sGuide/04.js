@@ -1,5 +1,16 @@
 registerTopic("Study Guide - Review file systems lecture",
 
+  /*
+  STDIN, STDOUT, STDERR.
+  Blocks. Why do we use them? 
+  Inodes. What are they, why do we need them?
+  Inode blocks vs. data blocks.
+  Inode walk. What happens when a process opens a file? Why do we need file descriptors? What would happen if we didn't have file descriptors?
+  The different ways to locate/access a file's data blocks. Are data blocks laid out on disk contiguously or not? Why?
+  Multi-level indexing. Direct, indirect, double-indirect, triple-indirect block pointers. What are they? How do they relate to file size? How are the pointers stored in an inode dereferenced when a process accesses (reads or writes) a file?
+  FS/Block cache. Why do we need it?
+  */
+
   {
     type: "flashcard",
     question: "What is persistence in computer science?",

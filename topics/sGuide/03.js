@@ -1,5 +1,13 @@
 registerTopic("Study Guide - Review syscalls lecture",
 
+  /*
+  Recognize the basic network and file syscalls: socket, bind, sendto, recvfrom, listen, connect, accept, send, receive, open, lseek, read, write, close. You don't need to know the signatures by heart. But if you see them in code, you should recognize them.
+  Connect these to the library calls that you used in the lab: fopen, fread, fwrite, fclose. Remember that each of these library calls makes a syscall under the covers.
+  Sockets and connections.
+  Directory trees.
+  File descriptors and offsets. All the pictures with offsets -- including on slides 48-52 -- must make sense.  
+  */
+ 
   {
     type: "flashcard",
     question: "What is the client-server model?",

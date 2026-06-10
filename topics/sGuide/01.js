@@ -1,5 +1,11 @@
 registerTopic("Study Guide - Review intro lecture 1",
 
+  /*
+  The concepts of interfaces and layers.
+  What does it mean that "the post office operates in layers"?
+  What is the illustration in slides 23-40 showing? What are the various headers useful for? Why are there separate layers?
+  */
+ 
   {
     type: "flashcard",
     question: "What is an end-system ?",

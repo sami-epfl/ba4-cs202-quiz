@@ -1,4 +1,9 @@
 registerTopic("Study Guide - Review intro lecture 2",
+
+  /*
+  The pictures until Slide 18. Is it clear what each of them is showing? Does every single term on those pictures make sense? Would you be able to explain each picture to a friend?
+  */
+
   {
     type: "flashcard",
     question: "What is an Operating System (OS)?",
